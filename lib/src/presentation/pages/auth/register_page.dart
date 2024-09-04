@@ -1,51 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:todo_list_app/src/presentation/misc/constant.dart';
 import 'package:todo_list_app/src/presentation/misc/methods.dart';
-import 'package:todo_list_app/src/presentation/misc/navigator_helper.dart';
 import 'package:todo_list_app/src/presentation/misc/style.dart';
 import 'package:todo_list_app/src/presentation/misc/validator.dart';
-import 'package:todo_list_app/src/presentation/pages/auth/register_page.dart';
 import 'package:todo_list_app/src/presentation/widgets/button.dart';
 import 'package:todo_list_app/src/presentation/widgets/textfield.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-bool isObscure = true;
-bool isLoadingLogin = true;
-
+TextEditingController nameController = TextEditingController();
 TextEditingController emailController = TextEditingController();
 TextEditingController passwordController = TextEditingController();
 
-class _LoginPageState extends State<LoginPage> {
+bool isObscure = true;
+bool isLoadingRegister = false;
+
+class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: whiteColor,
       body: ListView(
         children: [
-          verticalSpace(50),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32.0),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                verticalSpace(100),
                 Text(
-                  'Login',
+                  'Register',
                   style: blackSemiBoldTextStyle.copyWith(fontSize: 20),
                 ),
-                verticalSpace(10),
-                Center(
-                  child: Image.asset(
-                    'assets/images/illustration_login.png',
-                    height: 300,
-                  ),
+                verticalSpace(30),
+                KTextField(
+                  label: 'Name',
+                  maxLines: 1,
+                  minLines: 1,
+                  controller: nameController,
+                  borderColor: Colors.black,
+                  keyboardType: TextInputType.name,
+                  textInputAction: TextInputAction.next,
+                  validator: Validator.emailValidator.call,
+                  placeholder: 'Enter your email',
                 ),
-                verticalSpace(20),
+                verticalSpace(10),
                 KTextField(
                   label: 'Email',
                   maxLines: 1,
@@ -82,71 +85,20 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 verticalSpace(30),
                 Button(
-                  isLoading: isLoadingLogin,
-                  isDisabled: isLoadingLogin,
+                  isLoading: isLoadingRegister,
+                  isDisabled: isLoadingRegister,
                   onPressed: () {},
                   child: Center(
                     child: Text(
-                      'Login',
+                      'Register',
                       style: whiteMediumTextStyle.copyWith(fontSize: 14),
                     ),
                   ),
                 ),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      'Forgot Password ?',
-                      style: blackMediumTextStyle.copyWith(fontSize: 14),
-                    ),
-                  ),
-                ),
-                verticalSpace(20),
-                Center(
-                  child: Column(
-                    children: [
-                      Text(
-                        'sign in with',
-                        style: blackRegularTextStyle.copyWith(fontSize: 12),
-                      ),
-                      verticalSpace(4),
-                      InkWell(
-                        onTap: () {},
-                        child: Image.asset(
-                          'assets/images/logo_google.png',
-                          width: 25,
-                          height: 25,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                verticalSpace(50),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Don't have an account yet? ",
-                      style: blackMediumTextStyle.copyWith(fontSize: 14),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        NavigatorHelper.push(context, const RegisterPage());
-                      },
-                      child: Text(
-                        "Register now",
-                        style: blackMediumTextStyle.copyWith(
-                          fontSize: 14,
-                          color: primaryColor,
-                        ),
-                      ),
-                    ),
-                  ],
-                )
               ],
             ),
-          )
+          ),
+          verticalSpace(10),
         ],
       ),
     );

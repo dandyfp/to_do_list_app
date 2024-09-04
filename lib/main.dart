@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_list_app/firebase_options.dart';
 import 'package:todo_list_app/src/presentation/misc/constant.dart';
+import 'package:todo_list_app/src/presentation/pages/auth/login_page.dart';
 import 'package:todo_list_app/src/presentation/pages/home/home_page.dart';
 
 Future main() async {
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const HomePage(),
+      home: const LoginPage(),
     );
   }
 }

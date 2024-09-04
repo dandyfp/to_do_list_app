@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:todo_list_app/src/presentation/misc/constant.dart';
+import 'package:todo_list_app/src/presentation/misc/date_format.dart';
 import 'package:todo_list_app/src/presentation/misc/methods.dart';
 import 'package:todo_list_app/src/presentation/misc/style.dart';
 import 'package:todo_list_app/src/presentation/widgets/button.dart';
@@ -16,6 +18,7 @@ class HomePage extends StatefulWidget {
 TextEditingController titleController = TextEditingController();
 TextEditingController descController = TextEditingController();
 TextEditingController dateController = TextEditingController();
+TextEditingController searchController = TextEditingController();
 
 GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -26,88 +29,7 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: backgroundColor,
       floatingActionButton: FAB(
         onTap: () {
-          showModalBottomSheet(
-            enableDrag: true,
-            isDismissible: true,
-            isScrollControlled: true,
-            backgroundColor: whiteColor,
-            context: context,
-            builder: (context) {
-              return Padding(
-                padding: EdgeInsets.only(
-                  left: 24,
-                  right: 24,
-                  bottom: MediaQuery.of(context).viewInsets.bottom,
-                ),
-                child: Form(
-                  key: formKey,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      verticalSpace(20),
-                      Center(
-                        child: Container(
-                          height: 3,
-                          width: 77,
-                          color: primaryColor,
-                        ),
-                      ),
-                      verticalSpace(20),
-                      KTextField(
-                        maxLines: 1,
-                        minLines: 1,
-                        isActiveFocusBorder: true,
-                        controller: titleController,
-                        keyboardType: TextInputType.name,
-                        borderColor: Colors.black,
-                        textInputAction: TextInputAction.next,
-                        textCapitalization: TextCapitalization.sentences,
-                        label: 'Title',
-                      ),
-                      verticalSpace(10),
-                      KTextField(
-                        maxLines: 3,
-                        minLines: 3,
-                        isActiveFocusBorder: true,
-                        controller: descController,
-                        keyboardType: TextInputType.multiline,
-                        borderColor: Colors.black,
-                        textInputAction: TextInputAction.newline,
-                        textCapitalization: TextCapitalization.sentences,
-                        label: 'Description',
-                      ),
-                      verticalSpace(10),
-                      KTextField(
-                        maxLines: 1,
-                        minLines: 1,
-                        isOption: true,
-                        controller: dateController,
-                        isActiveFocusBorder: true,
-                        keyboardType: TextInputType.name,
-                        borderColor: Colors.black,
-                        textInputAction: TextInputAction.next,
-                        textCapitalization: TextCapitalization.sentences,
-                        label: 'Date',
-                        suffixIcon: const Icon(Icons.calendar_month_outlined),
-                        onTap: () {},
-                      ),
-                      verticalSpace(20),
-                      Button(
-                        onPressed: () {},
-                        child: Center(
-                          child: Text(
-                            'Add Task',
-                            style: whiteMediumTextStyle.copyWith(fontSize: 12),
-                          ),
-                        ),
-                      ),
-                      verticalSpace(40),
-                    ],
-                  ),
-                ),
-              );
-            },
-          );
+          bottomSheetAddTask(context);
         },
       ),
       body: ListView(
@@ -129,13 +51,18 @@ class _HomePageState extends State<HomePage> {
             ),
             child: Row(
               children: [
-                const Expanded(
+                Expanded(
                   child: KTextField(
                     isDense: true,
+                    maxLines: 1,
+                    keyboardType: TextInputType.name,
+                    textInputAction: TextInputAction.done,
+                    controller: searchController,
                     borderColor: Colors.transparent,
                     backgroundColor: Colors.transparent,
-                    prefixIcon: Icon(
+                    prefixIcon: const Icon(
                       Icons.search,
+                      size: 30,
                       color: ghostWhite,
                     ),
                   ),
@@ -209,6 +136,142 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
+    );
+  }
+
+  Future<dynamic> bottomSheetAddTask(BuildContext context) {
+    return showModalBottomSheet(
+      enableDrag: true,
+      isDismissible: true,
+      isScrollControlled: true,
+      backgroundColor: whiteColor,
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            left: 24,
+            right: 24,
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: Form(
+            key: formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                verticalSpace(20),
+                Center(
+                  child: Container(
+                    height: 3,
+                    width: 77,
+                    color: primaryColor,
+                  ),
+                ),
+                verticalSpace(20),
+                KTextField(
+                  maxLines: 1,
+                  minLines: 1,
+                  isActiveFocusBorder: true,
+                  controller: titleController,
+                  keyboardType: TextInputType.name,
+                  borderColor: Colors.black,
+                  textInputAction: TextInputAction.next,
+                  textCapitalization: TextCapitalization.sentences,
+                  label: 'Title',
+                  placeholder: 'Input title',
+                ),
+                verticalSpace(10),
+                KTextField(
+                  maxLines: 3,
+                  minLines: 3,
+                  isActiveFocusBorder: true,
+                  controller: descController,
+                  keyboardType: TextInputType.multiline,
+                  borderColor: Colors.black,
+                  textInputAction: TextInputAction.newline,
+                  textCapitalization: TextCapitalization.sentences,
+                  placeholder: 'Input description',
+                  label: 'Description',
+                ),
+                verticalSpace(10),
+                KTextField(
+                  maxLines: 1,
+                  minLines: 1,
+                  isOption: true,
+                  controller: dateController,
+                  isActiveFocusBorder: true,
+                  keyboardType: TextInputType.name,
+                  borderColor: Colors.black,
+                  textInputAction: TextInputAction.next,
+                  textCapitalization: TextCapitalization.sentences,
+                  placeholder: 'Choose date',
+                  label: 'Date',
+                  suffixIcon: const Icon(Icons.calendar_month_outlined),
+                  onTap: () {
+                    showDatePicker(context);
+                  },
+                ),
+                verticalSpace(20),
+                Button(
+                  onPressed: () {},
+                  child: Center(
+                    child: Text(
+                      'Add Task',
+                      style: whiteMediumTextStyle.copyWith(fontSize: 12),
+                    ),
+                  ),
+                ),
+                verticalSpace(40),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  showDatePicker(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      surfaceTintColor: whiteColor,
+      backgroundColor: whiteColor,
+      content: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SfDateRangePicker(
+              backgroundColor: whiteColor,
+              onSelectionChanged:
+                  (DateRangePickerSelectionChangedArgs value) {},
+              showActionButtons: true,
+              confirmText: 'Confirm',
+              cancelText: 'Cancel',
+              onCancel: () {
+                Navigator.pop(context);
+              },
+              onSubmit: (val) {
+                setState(() {
+                  dateController.text = FormatDate().formatDate(val.toString(),
+                      context: context, format: 'dd MMMM yyyy');
+                });
+                Navigator.pop(context);
+              },
+              selectionColor: primaryColor,
+              todayHighlightColor: primaryColor,
+              rangeSelectionColor: primaryColor.withOpacity(0.75),
+              selectionMode: DateRangePickerSelectionMode.single,
+              initialSelectedDate: DateTime.now(),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    showDialog(
+      context: context,
+      useSafeArea: true,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }
